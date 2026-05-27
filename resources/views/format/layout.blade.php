@@ -251,6 +251,9 @@
                         <a href="{{ route('admin.reports.index') }}" data-ajax-link="true" data-target="#ajaxPageContent">
                             <span class="nav-icon"><i class="fas fa-file-pdf"></i></span> Reports
                         </a>
+                        <a href="{{ route('admin.teachers') }}" data-ajax-link="true" data-target="#ajaxPageContent">
+                            <span class="nav-icon"><i class="fas fa-chalkboard"></i></span> View Teacher
+                        </a>
                         <a href="{{ route('admin.add.teacher') }}" data-ajax-link="true" data-target="#ajaxPageContent">
                             <span class="nav-icon"><i class="fas fa-chalkboard-user"></i></span> Insert Teacher
                         </a>
