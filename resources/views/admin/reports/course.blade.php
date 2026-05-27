@@ -27,14 +27,18 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($courses as $course)
+                    @forelse($courses as $course)
                     <tr>
                         <td>{{ $course->id }}</td>
                         <td>{{ $course->course_name ?? '-' }}</td>
                         <td>{{ $course->students ? count($course->students) : 0 }}</td>
                         <td>{{ $course->created_at->format('M d, Y') }}</td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="4" class="text-center text-muted">No course data found.</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>

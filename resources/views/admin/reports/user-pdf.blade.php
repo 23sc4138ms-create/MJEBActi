@@ -48,22 +48,28 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Name</th>
+                <th>Username</th>
                 <th>Email</th>
-                <th>Email Verified</th>
+                <th>Role</th>
+                <th>Status</th>
                 <th>Created At</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($users as $user)
+            @forelse($users as $user)
             <tr>
                 <td>{{ $user->id }}</td>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
-                <td>{{ $user->email_verified_at ? 'Yes' : 'No' }}</td>
-                <td>{{ $user->created_at->format('M d, Y H:i:s') }}</td>
+                <td>{{ $user->username ?? '-' }}</td>
+                <td>{{ $user->email ?? '-' }}</td>
+                <td>{{ ucfirst((string) ($user->role ?? '-')) }}</td>
+                <td>{{ (int) ($user->is_active ?? 0) === 1 ? 'Active' : 'Inactive' }}</td>
+                <td>{{ $user->created_at ? $user->created_at->format('M d, Y H:i:s') : '-' }}</td>
             </tr>
-            @endforeach
+            @empty
+            <tr>
+                <td colspan="6" style="text-align: center;">No user account data found.</td>
+            </tr>
+            @endforelse
         </tbody>
     </table>
 </body>

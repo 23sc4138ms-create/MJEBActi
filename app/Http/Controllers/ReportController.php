@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Student;
-use App\Models\User;
+use App\Models\UserAccount;
 use App\Models\Course;
-use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -19,13 +18,13 @@ class ReportController extends Controller
 
     public function studentReport()
     {
-        $students = Student::with('degree', 'user_account')->get();
+        $students = Student::with(['degree', 'userAccount', 'courses'])->get();
         return view('admin.reports.student', compact('students'));
     }
 
     public function studentPdf()
     {
-        $students = Student::with('degree', 'user_account')->get();
+        $students = Student::with(['degree', 'userAccount', 'courses'])->get();
         
         $pdf = Pdf::loadView('admin.reports.student-pdf', compact('students'))
             ->setPaper('a4', 'landscape');
@@ -35,7 +34,7 @@ class ReportController extends Controller
 
     public function studentExcel()
     {
-        $students = Student::with('degree', 'user_account')->get();
+        $students = Student::with(['degree', 'userAccount', 'courses'])->get();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -63,13 +62,16 @@ class ReportController extends Controller
         // Add data
         $row = 2;
         foreach ($students as $student) {
+            $fullName = trim(implode(' ', array_filter([$student->fname, $student->mname, $student->lname])));
+            $courseNames = $student->courses->pluck('course_name')->implode(', ');
+
             $sheet->setCellValue('A' . $row, $student->id);
-            $sheet->setCellValue('B' . $row, $student->name ?? '');
-            $sheet->setCellValue('C' . $row, $student->email ?? '');
-            $sheet->setCellValue('D' . $row, $student->phone ?? '');
+            $sheet->setCellValue('B' . $row, $fullName !== '' ? $fullName : '-');
+            $sheet->setCellValue('C' . $row, $student->email ?? ($student->userAccount->email ?? ''));
+            $sheet->setCellValue('D' . $row, $student->contact_no ?? '');
             $sheet->setCellValue('E' . $row, $student->age ?? '');
-            $sheet->setCellValue('F' . $row, $student->degree ? $student->degree->name : '');
-            $sheet->setCellValue('G' . $row, $student->course ?? '');
+            $sheet->setCellValue('F' . $row, $student->degree ? $student->degree->title : '');
+            $sheet->setCellValue('G' . $row, $courseNames !== '' ? $courseNames : ($student->course ?? ''));
             $row++;
         }
 
@@ -94,13 +96,13 @@ class ReportController extends Controller
 
     public function userReport()
     {
-        $users = User::all();
+        $users = UserAccount::query()->orderBy('id')->get();
         return view('admin.reports.user', compact('users'));
     }
 
     public function userPdf()
     {
-        $users = User::all();
+        $users = UserAccount::query()->orderBy('id')->get();
         
         $pdf = Pdf::loadView('admin.reports.user-pdf', compact('users'))
             ->setPaper('a4', 'landscape');
@@ -110,17 +112,18 @@ class ReportController extends Controller
 
     public function userExcel()
     {
-        $users = User::all();
+        $users = UserAccount::query()->orderBy('id')->get();
 
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
         // Set headers
         $sheet->setCellValue('A1', 'ID');
-        $sheet->setCellValue('B1', 'Name');
+        $sheet->setCellValue('B1', 'Username');
         $sheet->setCellValue('C1', 'Email');
-        $sheet->setCellValue('D1', 'Email Verified');
-        $sheet->setCellValue('E1', 'Created At');
+        $sheet->setCellValue('D1', 'Role');
+        $sheet->setCellValue('E1', 'Status');
+        $sheet->setCellValue('F1', 'Created At');
 
         // Style headers
         $headerStyle = [
@@ -129,7 +132,7 @@ class ReportController extends Controller
             'alignment' => ['horizontal' => 'center', 'vertical' => 'center'],
         ];
         
-        for ($col = 'A'; $col <= 'E'; $col++) {
+        for ($col = 'A'; $col <= 'F'; $col++) {
             $sheet->getStyle($col . '1')->applyFromArray($headerStyle);
         }
 
@@ -137,10 +140,11 @@ class ReportController extends Controller
         $row = 2;
         foreach ($users as $user) {
             $sheet->setCellValue('A' . $row, $user->id);
-            $sheet->setCellValue('B' . $row, $user->name);
+            $sheet->setCellValue('B' . $row, $user->username ?? '');
             $sheet->setCellValue('C' . $row, $user->email);
-            $sheet->setCellValue('D' . $row, $user->email_verified_at ? 'Yes' : 'No');
-            $sheet->setCellValue('E' . $row, $user->created_at);
+            $sheet->setCellValue('D' . $row, ucfirst((string) ($user->role ?? '')));
+            $sheet->setCellValue('E' . $row, (int) ($user->is_active ?? 0) === 1 ? 'Active' : 'Inactive');
+            $sheet->setCellValue('F' . $row, $user->created_at);
             $row++;
         }
 
@@ -149,7 +153,8 @@ class ReportController extends Controller
         $sheet->getColumnDimension('B')->setWidth(20);
         $sheet->getColumnDimension('C')->setWidth(25);
         $sheet->getColumnDimension('D')->setWidth(15);
-        $sheet->getColumnDimension('E')->setWidth(20);
+        $sheet->getColumnDimension('E')->setWidth(14);
+        $sheet->getColumnDimension('F')->setWidth(20);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'user-report-' . date('Y-m-d') . '.xlsx';

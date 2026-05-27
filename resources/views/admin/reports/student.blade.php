@@ -30,17 +30,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($students as $student)
+                    @forelse($students as $student)
                     <tr>
                         <td>{{ $student->id }}</td>
-                        <td>{{ $student->name ?? '-' }}</td>
-                        <td>{{ $student->email ?? '-' }}</td>
-                        <td>{{ $student->phone ?? '-' }}</td>
+                        <td>{{ trim(($student->fname ?? '') . ' ' . ($student->mname ?? '') . ' ' . ($student->lname ?? '')) ?: '-' }}</td>
+                        <td>{{ $student->email ?? ($student->userAccount->email ?? '-') }}</td>
+                        <td>{{ $student->contact_no ?? '-' }}</td>
                         <td>{{ $student->age ?? '-' }}</td>
-                        <td>{{ $student->degree ? $student->degree->name : '-' }}</td>
-                        <td>{{ $student->course ?? '-' }}</td>
+                        <td>{{ $student->degree ? $student->degree->title : '-' }}</td>
+                        <td>{{ $student->courses->pluck('course_name')->implode(', ') ?: ($student->course ?? '-') }}</td>
                     </tr>
-                    @endforeach
+                    @empty
+                    <tr>
+                        <td colspan="7" class="text-center text-muted">No student data found.</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
