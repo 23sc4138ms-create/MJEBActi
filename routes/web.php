@@ -8,6 +8,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\DegreeController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ReportController;
 
 // Maintenance route - ALWAYS accessible
 Route::get('/maintenance', function () {
@@ -79,6 +80,18 @@ Route::middleware('maintenance')->group(function () {
             Route::post('/admin/store-student', [UserController::class, 'storeStudent'])->name('admin.store.student');
             Route::get('/admin/add-teacher', [UserController::class, 'showAddTeacherForm'])->name('admin.add.teacher');
             Route::post('/admin/store-teacher', [UserController::class, 'storeTeacher'])->name('admin.store.teacher');
+
+            // Report routes
+            Route::get('/admin/reports', [ReportController::class, 'index'])->name('admin.reports.index');
+            Route::get('/admin/reports/student', [ReportController::class, 'studentReport'])->name('admin.reports.student');
+            Route::get('/admin/reports/student/pdf', [ReportController::class, 'studentPdf'])->name('admin.reports.student.pdf');
+            Route::get('/admin/reports/student/excel', [ReportController::class, 'studentExcel'])->name('admin.reports.student.excel');
+            Route::get('/admin/reports/user', [ReportController::class, 'userReport'])->name('admin.reports.user');
+            Route::get('/admin/reports/user/pdf', [ReportController::class, 'userPdf'])->name('admin.reports.user.pdf');
+            Route::get('/admin/reports/user/excel', [ReportController::class, 'userExcel'])->name('admin.reports.user.excel');
+            Route::get('/admin/reports/course', [ReportController::class, 'courseReport'])->name('admin.reports.course');
+            Route::get('/admin/reports/course/pdf', [ReportController::class, 'coursePdf'])->name('admin.reports.course.pdf');
+            Route::get('/admin/reports/course/excel', [ReportController::class, 'courseExcel'])->name('admin.reports.course.excel');
         });
 
 
