@@ -110,7 +110,7 @@ class UserController extends Controller
             ]);
 
             if ($mustChangePassword) {
-                return redirect()->route('password.change')->with('info', 'Please change your password before continuing.');
+                return redirect()->route('password.change')->with('info', 'Please set a new password to continue.');
             }
 
             // Redirect to appropriate dashboard based on role
@@ -225,7 +225,7 @@ class UserController extends Controller
         }
 
         if (!$this->shouldForcePasswordChange($user)) {
-            return $this->redirectByRole((string) $user->role)->with('info', 'Your password has already been updated.');
+            return $this->redirectByRole((string) $user->role)->with('info', 'Your password is already up to date.');
         }
 
         return view('changePassword');
@@ -245,7 +245,7 @@ class UserController extends Controller
         }
 
         if (!$this->shouldForcePasswordChange($user)) {
-            return $this->redirectByRole((string) $user->role)->with('info', 'Your password has already been updated.');
+            return $this->redirectByRole((string) $user->role)->with('info', 'Your password is already up to date.');
         }
 
         // Validate the input
@@ -254,15 +254,15 @@ class UserController extends Controller
             'new_password' => 'required|min:8|different:current_password',
             'confirm_password' => 'required|same:new_password',
         ], [
-            'new_password.min' => 'New password must be at least 8 characters long.',
-            'new_password.different' => 'New password must be different from your current password.',
-            'confirm_password.same' => 'Password confirmation does not match.',
+            'new_password.min' => 'Please use at least 8 characters for the new password.',
+            'new_password.different' => 'Your new password must be different from the current one.',
+            'confirm_password.same' => 'The confirmation password does not match.',
         ]);
 
         try {
             // Verify current password
             if (!Hash::check($request->current_password, $user->password)) {
-                return back()->withErrors(['current_password' => 'Current password is incorrect.']);
+                return back()->withErrors(['current_password' => 'The current password you entered is incorrect.']);
             }
 
             // Update password (model casts password as 'hashed')
@@ -281,13 +281,13 @@ class UserController extends Controller
                 'username' => $user->username
             ]);
 
-            return $this->redirectByRole((string) $user->role)->with('success', 'Password changed successfully!');
+            return $this->redirectByRole((string) $user->role)->with('success', 'Your password has been updated successfully.');
         } catch (\Exception $e) {
             Log::error('Error changing password', [
                 'user_id' => session('user_id'),
                 'error' => $e->getMessage()
             ]);
-            return back()->withErrors(['error' => 'An error occurred while changing your password. Please try again.']);
+            return back()->withErrors(['error' => 'We could not update your password. Please try again.']);
         }
     }
 
@@ -416,17 +416,17 @@ class UserController extends Controller
 
             $teacher = UserAccount::create($teacherData);
 
-            Log::info('Teacher account created successfully', ['username' => $request->username]);
+            Log::info('Teacher account inserted successfully', ['username' => $request->username]);
             if ($request->expectsJson()) {
-                return response()->json(['success' => true, 'message' => 'Teacher account created successfully', 'teacher' => $teacher], 201);
+                return response()->json(['success' => true, 'message' => 'Teacher inserted successfully', 'teacher' => $teacher], 201);
             }
-            return redirect()->route('admin.dashboard')->with('success', 'Teacher account created successfully!');
+            return redirect()->route('admin.dashboard')->with('success', 'Teacher inserted successfully!');
         } catch (\Exception $e) {
-            Log::error('Error creating teacher account', ['error' => $e->getMessage()]);
+            Log::error('Error inserting teacher account', ['error' => $e->getMessage()]);
             if ($request->expectsJson()) {
-                return response()->json(['error' => 'Error adding teacher. Please try again.'], 500);
+                return response()->json(['error' => 'Error inserting teacher. Please try again.'], 500);
             }
-            return back()->withErrors(['error' => 'Error adding teacher. Please try again.']);
+            return back()->withErrors(['error' => 'Error inserting teacher. Please try again.']);
         }
     }
 
