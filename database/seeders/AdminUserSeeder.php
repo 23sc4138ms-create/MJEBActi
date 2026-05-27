@@ -6,13 +6,13 @@ use Illuminate\Database\Seeder;
 use App\Models\UserAccount;
 use Illuminate\Support\Facades\Hash;
 
-class AdminSeeder extends Seeder
+class AdminUserSeeder extends Seeder
 {
     public function run()
     {
         $username = 'admin';
-        $email = 'admin@example.com';
-        $password = 'Admin1234!';
+        $email = 'admin@gmail.com';
+        $password = 'admin123';
 
         $existing = UserAccount::where('username', $username)->orWhere('email', $email)->first();
         if ($existing) {
