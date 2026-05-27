@@ -227,7 +227,7 @@
                     </div>
                 @endif
 
-                    <form action="{{ route('admin.store.teacher') }}" method="POST" novalidate data-ajax="true" data-reset-on-success="true">
+                    <form action="{{ route('admin.store.teacher') }}" method="POST" novalidate>
                         @csrf
 
                         <div class="mb-3">

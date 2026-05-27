@@ -72,6 +72,7 @@ Route::middleware('maintenance')->group(function () {
         Route::middleware('role:admin')->group(function () {
             Route::get('/admin-dashboard', [UserController::class, 'adminDashboard'])->name('admin.dashboard');
             Route::get('/logs', [PageController::class, 'logs'])->name('logs');
+            Route::get('/admin/teachers', [UserController::class, 'teacherList'])->name('admin.teachers');
 
             Route::resource('students', StudentController::class);
             Route::resource('degrees', DegreeController::class);

@@ -424,9 +424,9 @@ class UserController extends Controller
 
             Log::info('Teacher account inserted successfully', ['username' => $request->username]);
             if ($request->expectsJson()) {
-                return response()->json(['success' => true, 'message' => 'Teacher inserted successfully', 'teacher' => $teacher], 201);
+                return response()->json(['success' => true, 'message' => 'Teacher inserted successfully', 'teacher' => $teacher, 'redirect_url' => route('admin.teachers')], 201);
             }
-            return redirect()->route('admin.dashboard')->with('success', 'Teacher inserted successfully!');
+            return redirect()->route('admin.teachers')->with('success', 'Teacher inserted successfully!');
         } catch (\Exception $e) {
             Log::error('Error inserting teacher account', ['error' => $e->getMessage()]);
             if ($request->expectsJson()) {
@@ -434,6 +434,19 @@ class UserController extends Controller
             }
             return back()->withErrors(['error' => 'Error inserting teacher. Please try again.']);
         }
+    }
+
+    /**
+     * Show the list of inserted teacher accounts.
+     */
+    public function teacherList()
+    {
+        $teachers = UserAccount::query()
+            ->where('role', 'teacher')
+            ->orderBy('id', 'desc')
+            ->get();
+
+        return view('admin.teachers', compact('teachers'));
     }
 
 
