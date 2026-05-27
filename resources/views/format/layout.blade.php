@@ -60,29 +60,13 @@
             gap: 0.8rem;
             flex-shrink: 0;
         }
-        .header-brand .brand-icon {
-            width: 40px; height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255,255,255,0.14);
-            color: #fff;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
         .header-brand .brand-text h2 {
             margin: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1rem;
+            font-size: 1.08rem;
             font-weight: 800;
             color: #fff;
             line-height: 1.1;
-        }
-        .header-brand .brand-text small {
-            display: block;
-            font-size: 0.7rem;
-            color: rgba(255,255,255,0.72);
-            font-weight: 500;
         }
         .header-nav {
             display: flex;
@@ -248,10 +232,8 @@
         <header class="site-header">
             <div class="header-inner">
                 <div class="header-brand">
-                    <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
                     <div class="brand-text">
                         <h2>Education</h2>
-                        <small>Educational Management</small>
                     </div>
                 </div>
 

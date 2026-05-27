@@ -171,7 +171,13 @@ class UserController extends Controller
     {
         $userId = (int) session('user_id');
         try {
-            return view('teacherDashboard');
+            $teacher = UserAccount::find($userId);
+
+            if (!$teacher) {
+                return redirect()->route('login')->withErrors(['login' => 'Teacher account not found.']);
+            }
+
+            return view('teacherDashboard', ['teacher' => $teacher]);
         } catch (\Exception $e) {
             Log::error('Error loading teacher dashboard', [
                 'user_id' => $userId,

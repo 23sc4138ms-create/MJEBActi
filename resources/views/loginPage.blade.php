@@ -50,36 +50,14 @@
         .login-inner { padding: 1.7rem; }
 
         .login-brand {
-            display: flex;
-            align-items: center;
-            gap: 0.9rem;
             margin-bottom: 1.15rem;
-        }
-
-        .logo-box {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #0ea5ff, #38bdf8);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            flex-shrink: 0;
         }
 
         .brand-name {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             font-weight: 800;
             color: #0b2540;
-        }
-
-        .brand-sub {
-            font-size: 0.72rem;
-            color: #6b9bbd;
-            font-weight: 500;
         }
 
         .form-heading {
@@ -248,11 +226,7 @@
         <div class="login-card">
             <div class="login-inner">
                 <div class="login-brand">
-                    <div class="logo-box"><i class="fas fa-graduation-cap"></i></div>
-                    <div>
-                        <div class="brand-name">Education</div>
-                        <small class="brand-sub">Educational Management System</small>
-                    </div>
+                    <div class="brand-name">Education</div>
                 </div>
 
                 <h2 class="form-heading">Welcome back</h2>
@@ -342,7 +316,7 @@
                         </button>
                     </form>
 
-                    <p class="login-footer-note">Education &copy; {{ date('Y') }} &mdash; Educational Management System</p>
+                    <p class="login-footer-note">Education &copy; {{ date('Y') }}</p>
 
                     <script>
                         (function () {
