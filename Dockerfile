@@ -3,7 +3,7 @@ FROM php:8.4-cli
 
 RUN apt-get update && apt-get install -y \
     git unzip curl libzip-dev zip libpng-dev \
-    && docker-php-ext-install pdo pdo_mysql zip
+    && docker-php-ext-install pdo pdo_mysql zip gd
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -11,7 +11,7 @@ WORKDIR /var/www
 
 # I-cache muna ang dependencies bago kopyahin ang buong source
 COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-scripts
+RUN composer install --no-dev --optimize-autoloader --no-scripts --ignore-platform-req=ext-gd
 
 # Saka kopyahin ang buong code
 COPY . .
