@@ -24,9 +24,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Phone</th>
-                        <th>Age</th>
                         <th>Degree</th>
-                        <th>Course</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,13 +34,11 @@
                         <td>{{ trim(($student->fname ?? '') . ' ' . ($student->mname ?? '') . ' ' . ($student->lname ?? '')) ?: '-' }}</td>
                         <td>{{ $student->email ?? ($student->userAccount->email ?? '-') }}</td>
                         <td>{{ $student->contact_no ?? '-' }}</td>
-                        <td>{{ $student->age ?? '-' }}</td>
                         <td>{{ $student->degree ? $student->degree->title : '-' }}</td>
-                        <td>{{ $student->courses->pluck('course_name')->implode(', ') ?: ($student->course ?? '-') }}</td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="7" class="text-center text-muted">No student data found.</td>
+                        <td colspan="5" class="text-center text-muted">No student data found.</td>
                     </tr>
                     @endforelse
                 </tbody>

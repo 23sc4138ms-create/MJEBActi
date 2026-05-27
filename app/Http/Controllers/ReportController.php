@@ -44,9 +44,7 @@ class ReportController extends Controller
         $sheet->setCellValue('B1', 'Name');
         $sheet->setCellValue('C1', 'Email');
         $sheet->setCellValue('D1', 'Phone');
-        $sheet->setCellValue('E1', 'Age');
-        $sheet->setCellValue('F1', 'Degree');
-        $sheet->setCellValue('G1', 'Course');
+        $sheet->setCellValue('E1', 'Degree');
 
         // Style headers
         $headerStyle = [
@@ -55,7 +53,7 @@ class ReportController extends Controller
             'alignment' => ['horizontal' => 'center', 'vertical' => 'center'],
         ];
         
-        for ($col = 'A'; $col <= 'G'; $col++) {
+        for ($col = 'A'; $col <= 'E'; $col++) {
             $sheet->getStyle($col . '1')->applyFromArray($headerStyle);
         }
 
@@ -63,15 +61,12 @@ class ReportController extends Controller
         $row = 2;
         foreach ($students as $student) {
             $fullName = trim(implode(' ', array_filter([$student->fname, $student->mname, $student->lname])));
-            $courseNames = $student->courses->pluck('course_name')->implode(', ');
 
             $sheet->setCellValue('A' . $row, $student->id);
             $sheet->setCellValue('B' . $row, $fullName !== '' ? $fullName : '-');
             $sheet->setCellValue('C' . $row, $student->email ?? ($student->userAccount->email ?? ''));
             $sheet->setCellValue('D' . $row, $student->contact_no ?? '');
-            $sheet->setCellValue('E' . $row, $student->age ?? '');
-            $sheet->setCellValue('F' . $row, $student->degree ? $student->degree->title : '');
-            $sheet->setCellValue('G' . $row, $courseNames !== '' ? $courseNames : ($student->course ?? ''));
+            $sheet->setCellValue('E' . $row, $student->degree ? $student->degree->title : '');
             $row++;
         }
 
@@ -80,9 +75,7 @@ class ReportController extends Controller
         $sheet->getColumnDimension('B')->setWidth(25);
         $sheet->getColumnDimension('C')->setWidth(25);
         $sheet->getColumnDimension('D')->setWidth(15);
-        $sheet->getColumnDimension('E')->setWidth(8);
-        $sheet->getColumnDimension('F')->setWidth(20);
-        $sheet->getColumnDimension('G')->setWidth(20);
+        $sheet->getColumnDimension('E')->setWidth(20);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'student-report-' . date('Y-m-d') . '.xlsx';
