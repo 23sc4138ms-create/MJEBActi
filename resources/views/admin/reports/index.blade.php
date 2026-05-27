@@ -30,17 +30,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Course Report Card -->
-        <div class="col-md-4 mb-4">
-            <div class="card" style="border: 1px solid #e0e0e0;">
-                <div class="card-body">
-                    <h5 class="card-title">Course Report</h5>
-                    <p class="card-text">Generate course records in PDF or Excel format.</p>
-                    <a href="{{ route('admin.reports.course') }}" class="btn btn-primary btn-sm">View Report</a>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 @endsection

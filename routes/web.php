@@ -89,9 +89,6 @@ Route::middleware('maintenance')->group(function () {
             Route::get('/admin/reports/user', [ReportController::class, 'userReport'])->name('admin.reports.user');
             Route::get('/admin/reports/user/pdf', [ReportController::class, 'userPdf'])->name('admin.reports.user.pdf');
             Route::get('/admin/reports/user/excel', [ReportController::class, 'userExcel'])->name('admin.reports.user.excel');
-            Route::get('/admin/reports/course', [ReportController::class, 'courseReport'])->name('admin.reports.course');
-            Route::get('/admin/reports/course/pdf', [ReportController::class, 'coursePdf'])->name('admin.reports.course.pdf');
-            Route::get('/admin/reports/course/excel', [ReportController::class, 'courseExcel'])->name('admin.reports.course.excel');
         });
 
 
