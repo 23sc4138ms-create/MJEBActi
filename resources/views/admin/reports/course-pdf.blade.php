@@ -48,7 +48,6 @@
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Course Code</th>
                 <th>Course Name</th>
                 <th>Total Students</th>
                 <th>Created At</th>
@@ -58,8 +57,7 @@
             @foreach($courses as $course)
             <tr>
                 <td>{{ $course->id }}</td>
-                <td>{{ $course->code ?? '-' }}</td>
-                <td>{{ $course->name ?? '-' }}</td>
+                <td>{{ $course->course_name ?? '-' }}</td>
                 <td>{{ $course->students ? count($course->students) : 0 }}</td>
                 <td>{{ $course->created_at->format('M d, Y H:i:s') }}</td>
             </tr>

@@ -186,10 +186,9 @@ class ReportController extends Controller
 
         // Set headers
         $sheet->setCellValue('A1', 'Course ID');
-        $sheet->setCellValue('B1', 'Course Code');
-        $sheet->setCellValue('C1', 'Course Name');
-        $sheet->setCellValue('D1', 'Total Students');
-        $sheet->setCellValue('E1', 'Created At');
+        $sheet->setCellValue('B1', 'Course Name');
+        $sheet->setCellValue('C1', 'Total Students');
+        $sheet->setCellValue('D1', 'Created At');
 
         // Style headers
         $headerStyle = [
@@ -198,7 +197,7 @@ class ReportController extends Controller
             'alignment' => ['horizontal' => 'center', 'vertical' => 'center'],
         ];
         
-        for ($col = 'A'; $col <= 'E'; $col++) {
+        for ($col = 'A'; $col <= 'D'; $col++) {
             $sheet->getStyle($col . '1')->applyFromArray($headerStyle);
         }
 
@@ -206,19 +205,17 @@ class ReportController extends Controller
         $row = 2;
         foreach ($courses as $course) {
             $sheet->setCellValue('A' . $row, $course->id);
-            $sheet->setCellValue('B' . $row, $course->code ?? '');
-            $sheet->setCellValue('C' . $row, $course->name ?? '');
-            $sheet->setCellValue('D' . $row, $course->students ? count($course->students) : 0);
-            $sheet->setCellValue('E' . $row, $course->created_at);
+            $sheet->setCellValue('B' . $row, $course->course_name ?? '');
+            $sheet->setCellValue('C' . $row, $course->students ? count($course->students) : 0);
+            $sheet->setCellValue('D' . $row, $course->created_at);
             $row++;
         }
 
         // Adjust column widths
         $sheet->getColumnDimension('A')->setWidth(12);
-        $sheet->getColumnDimension('B')->setWidth(15);
-        $sheet->getColumnDimension('C')->setWidth(25);
-        $sheet->getColumnDimension('D')->setWidth(15);
-        $sheet->getColumnDimension('E')->setWidth(20);
+        $sheet->getColumnDimension('B')->setWidth(25);
+        $sheet->getColumnDimension('C')->setWidth(15);
+        $sheet->getColumnDimension('D')->setWidth(20);
 
         $writer = new Xlsx($spreadsheet);
         $filename = 'course-report-' . date('Y-m-d') . '.xlsx';

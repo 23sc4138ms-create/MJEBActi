@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('format.layout')
 
-@section('content')
+@section('Content')
 <div class="container mt-4">
     <div class="row">
         <div class="col-md-12">
